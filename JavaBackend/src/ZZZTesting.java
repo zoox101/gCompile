@@ -1,6 +1,9 @@
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ZZZTesting {
-	public static void main(String args) {
-		System.out.println("Hello from a jar file!");
+	
+	public static void main(String[] args) throws MalformedURLException {
 	}
+
 }
