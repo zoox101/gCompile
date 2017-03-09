@@ -2,7 +2,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document; 
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements; 
 
 public class ZZZTesting {
 	
@@ -15,12 +17,14 @@ public class ZZZTesting {
 		        .executeMediaAndDownloadTo(outputStream);
 		        */
 
-		
 		//System.out.println(Bash.run("echo testing12345")[1]);
 		
-		String input = Bash.run("curl https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit?usp=sharing")[0];
-		Document soup = Jsoup.parse(input);
-		System.out.println(soup.text());
+		Document doc = Jsoup.connect("https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit?usp=sharing").get();
+		
+		
+		Element body = doc;
+		//System.out.println(body.getAllElements());
+		System.out.println(body.select("meta[property = og:description]").attr("content"));
 		
 		
 		//String[] io = Bash.run("curl https://www.google.com");
