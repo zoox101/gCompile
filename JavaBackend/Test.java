@@ -1,5 +1,1 @@
-public class Test {
-	public static void main(String[] args) {
-		System.out.println("Hello from a java-text file!");
-	}
-}
+public class Test {  public static void main(String[] args) { System.out.println("Hello from a google doc!"); System.out.println("12345"); for(int i=0; i<10; i++) {System.out.print(i);} System.out.println("\n" + woo());}  public static String woo() { 	return "WOO HOO!!!";} }
