@@ -15,12 +15,12 @@ public class Bash {
 	    	//Creates a new process and waits for it to run
 	        Process process = Runtime.getRuntime().exec(command);
 	        process.waitFor();
-	       
+	        	       
 	        //Appends the input to the input variable
 	        BufferedReader inputreader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 	        String inputline = "";
 	        while ((inputline = inputreader.readLine()) != null) {input.append(inputline + "\n");}
-	        
+	        	        
 	        //Appends the error to the error variable
 	        BufferedReader errorreader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 	        String errorline = "";
