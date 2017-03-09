@@ -31,6 +31,7 @@ public class Driver {
 
 		Bash.run("javac Test.java");
 		String[] io = Bash.run("java Test");
+		System.out.println(Bash.check);
 		System.out.println(io[0]);
 
 	}
