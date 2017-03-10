@@ -3,20 +3,24 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-public class Driver {
+public class GCompile {
 
 	public static void main(String args[]) throws IOException {
 
 		System.out.println("Running");
-		System.out.println(compileAndRun("1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ"));
+		String main = compile("1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ");
+		compile("1fk3NDJ6m_p5woQkW03mkYmpHuC1knuRPcHmMGXTwUrk");
+		System.out.println(run(main));
 
 	}
 	
-	public static String compileAndRun(String documentlink) throws IOException {
+	//Compiles the code from the given link
+	public static String compile(String documentlink) throws IOException {
 		
 		//Connecting to the server and getting the data
 		Document doc = Jsoup.connect("https://docs.google.com/document/d/" + documentlink + "/edit?usp=sharing").get();
@@ -39,6 +43,13 @@ public class Driver {
 		File file = new File(title + ".java");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(code); writer.close();
+		
+		//Return the name of the class
+		return title;
+	}
+	
+	//Runs the file associated with the given title
+	public static String run(String title) {
 
 		//Runs the file
 		Bash.run("javac " + title + ".java");
@@ -47,7 +58,6 @@ public class Driver {
 		
 		//Return error if it breaks, return output if it doesn't
 		if(error.equals("")) {return output;}
-		else {return error;}		
+		else {return error;}	
 	}
-
 }

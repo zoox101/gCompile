@@ -38,6 +38,7 @@ public class Bash {
 	    return input.toString();
 	}
 	
+	//Checks to see if the previous commands have thrown an error
 	public static String checkError() {
 		for(String error: errorqueue) {
 			if(!error.equals("")) {
