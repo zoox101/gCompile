@@ -19,6 +19,10 @@ public class GCompile {
 
 	}
 	
+	public static String compileAndRun(ArrayList<String> googledocs, File directory) {
+		return null;
+	}
+	
 	//Compiles the code from the given link
 	public static String compile(String documentlink) throws IOException {
 		
