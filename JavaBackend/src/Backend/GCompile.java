@@ -62,7 +62,7 @@ public class GCompile {
 
 		//Getting the unsanitized data from the HTML page
 		String unsandata = targetelement.data();
-		System.out.println(unsandata);
+		//System.out.println(unsandata);
 
 		String expectedstart = "DOCS_modelChunk = [{\"ty\":\"is\",\"ibi\":1,\"s\":";
 
@@ -122,11 +122,10 @@ public class GCompile {
 		writer.write(code); writer.close();
 
 		if(directory != null) {
-			Bash.run("javac " + directory.getAbsolutePath() + File.separator + title + ".java");
+			String dir = directory.getAbsolutePath();
+			Bash.run("javac -sourcepath " + dir + " -d " + dir + " " +  dir + File.separator + title + ".java");
 		}
-		else {
-			Bash.run("javac " + title + ".java");
-		}
+		else {Bash.run("javac " + title + ".java");}
 
 		//Return the name of the class
 		return title;
