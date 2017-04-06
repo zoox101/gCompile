@@ -23,7 +23,7 @@ public class GCompile {
 		return null;
 	}
 	
-	//Compiles the code from the given link
+	//Compiles the code from the given link returns the name of the class
 	public static String compile(String documentlink) throws IOException {
 		
 		//Connecting to the server and getting the data
