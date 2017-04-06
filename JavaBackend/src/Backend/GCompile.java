@@ -12,7 +12,7 @@ import org.jsoup.select.Elements;
 
 public class GCompile {
 
-	//The file seperator for the local machine
+	//The file separator for the local machine
 	public final static String fsep = File.separator;
 
 	//Compiles the google docs and runs the main method
@@ -56,7 +56,7 @@ public class GCompile {
 
 		//Getting the unsanitized data from the HTML page
 		String unsandata = targetelement.data();
-		//System.out.println(unsandata);
+		//System.out.println(unsandata); //TESTING
 
 		String expectedstart = "DOCS_modelChunk = [{\"ty\":\"is\",\"ibi\":1,\"s\":";
 
@@ -72,13 +72,19 @@ public class GCompile {
 		for(int i=1; i<unsandata.length(); i++) {
 			if(unsandata.charAt(i) == '\\') {
 				i++; 
-				String dummytab = "u000b";
-				String equals = "u003d";
-				if(unsandata.charAt(i) == 'n') {returnbuffer.append("\n");}
-				else if(unsandata.charAt(i) == '"') {returnbuffer.append("\"");}
-				else if(unsandata.substring(i, i+dummytab.length()).equals(dummytab)) {i+=dummytab.length()-1;}
+				String dummytab = "u000b"; String equals = "u003d";
+				if(unsandata.substring(i, i+dummytab.length()).equals(dummytab)) {i+=dummytab.length()-1;}
 				else if(unsandata.substring(i, i+equals.length()).equals(equals)) {
 					i+=equals.length()-1; returnbuffer.append("=");}
+				else if(unsandata.charAt(i) == '\\') {returnbuffer.append("\\" + unsandata.charAt(++i));}
+				else if(unsandata.charAt(i) == 't') {returnbuffer.append("\t");}
+				else if(unsandata.charAt(i) == 'b') {returnbuffer.append("\b");}
+				else if(unsandata.charAt(i) == 'n') {returnbuffer.append("\n");}
+				else if(unsandata.charAt(i) == 'r') {returnbuffer.append("\r");}
+				else if(unsandata.charAt(i) == 'f') {returnbuffer.append("\f");}
+				else if(unsandata.charAt(i) == '\'') {returnbuffer.append("\'");}
+				else if(unsandata.charAt(i) == '"') {returnbuffer.append("\"");}
+				//else {throw new IOException("UNKNOWN_CHARACTER_EDGE_CASE: " + unsandata.charAt(i));}
 			}
 			else if(unsandata.charAt(i) == '"') {break;}
 			else {returnbuffer.append(unsandata.charAt(i));}

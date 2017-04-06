@@ -1,3 +1,1 @@
-TODO:
-Fix the input sanitization \n not working inside of parens
-Add src and bin folder to the working directory
+TODO: Backend's Finished!

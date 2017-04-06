@@ -16,6 +16,8 @@ public class ZZZTesting {
 		FileStorage store = new FileStorage(new File("/Users/WilliamBooker/Desktop/AAAGDocOutputs/"));
 		store.add("https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit?usp=sharing");
 		store.add("https://docs.google.com/document/d/1fk3NDJ6m_p5woQkW03mkYmpHuC1knuRPcHmMGXTwUrk/edit?usp=sharing");
+		//store.add("https://docs.google.com/document/d/10IXAHNEpPP4s0c76cCLJYnQhbFwH2VMYEuv3cUvZiMo/edit?usp=sharing");
+		
 		System.out.println(GCompile.compileAndRun(store, store.src, store.bin));
 	}
 
@@ -27,9 +29,6 @@ public class ZZZTesting {
 		
 		File file = new File("/Users/WilliamBooker/Desktop/AAAGDocOutputs/");
 		System.out.println(file.isDirectory());
-		
-		
-		
 	}
 	
 	private static void test(String string) throws IOException {
