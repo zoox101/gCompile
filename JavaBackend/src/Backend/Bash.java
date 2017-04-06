@@ -20,7 +20,7 @@ public class Bash {
 	    	//Creates a new process and waits for it to run
 	        Process process = Runtime.getRuntime().exec(command);
 	        //process.waitFor();
-	        	       
+	        
 	        //Appends the input to the input variable
 	        BufferedReader inputreader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 	        String inputline = "";

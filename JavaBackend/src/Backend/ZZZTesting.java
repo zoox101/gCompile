@@ -12,8 +12,11 @@ public class ZZZTesting {
 
 	public static void main(String[] args) throws IOException {
 		
-		Document doc = Jsoup.connect("https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit").get();
-		test(doc.body().toString());
+		//Document doc = Jsoup.connect("https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit").get();
+		//test(doc.body().toString());
+		
+		File file = new File("/Users/WilliamBooker/Desktop/AAAGDocOutputs/");
+		System.out.println(file.isDirectory());
 		
 		
 		
