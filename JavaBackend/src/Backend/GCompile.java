@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class GCompile {
 
@@ -28,7 +30,7 @@ public class GCompile {
 		
 		//Connecting to the server and getting the data
 		Document doc = Jsoup.connect("https://docs.google.com/document/d/" + documentlink + "/edit?usp=sharing").get();
-		String code = doc.select("meta[property = og:description]").attr("content");
+		String code = fetchData(doc);
 		
 		//Sanitizing the returned code
 		StringBuffer newcode = new StringBuffer();
@@ -42,7 +44,6 @@ public class GCompile {
 		int endbezel = new String(" - Google Docs").length();
 		title = title.substring(0, title.length()-endbezel);
 
-
 		//Creating a java file to hold the file
 		File file = new File(title + ".java");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -50,6 +51,50 @@ public class GCompile {
 		
 		//Return the name of the class
 		return title;
+		
+	}
+	
+	
+	private static String fetchData(Document doc) throws IOException {
+		
+		Elements elements = doc.select("script[type = text/javascript]");
+		
+		//Getting the target element
+		Element targetelement = null;
+		String target = "DOCS_modelChunk =";
+		for(Element element: elements) {
+			if(element.data().length() > target.length() && 
+					element.data().substring(0, target.length()).equals(target)) {
+				targetelement = element;
+				break;
+			}
+		}
+		
+		String unsandata = targetelement.data();
+		String expectedstart = "DOCS_modelChunk = [{\"ty\":\"is\",\"ibi\":1,\"s\":";
+		
+		if(!unsandata.substring(0, expectedstart.length()).equals(expectedstart)) {
+			throw new IOException("ODD INFO FROM GOOGLE EXCEPTION");}
+		
+		unsandata = unsandata.substring(expectedstart.length());
+				
+		StringBuffer returnbuffer = new StringBuffer();
+		for(int i=1; i<unsandata.length(); i++) {
+			if(unsandata.charAt(i) == '\\') {
+				i++; 
+				String dummytab = "u000b";
+				String equals = "u003d";
+				if(unsandata.charAt(i) == 'n') {returnbuffer.append("\n");}
+				else if(unsandata.charAt(i) == '"') {returnbuffer.append("\"");}
+				else if(unsandata.substring(i, i+dummytab.length()).equals(dummytab)) {i+=dummytab.length()-1;}
+				else if(unsandata.substring(i, i+equals.length()).equals(equals)) {
+					i+=equals.length()-1; returnbuffer.append("=");}
+			}
+			else if(unsandata.charAt(i) == '"') {break;}
+			else {returnbuffer.append(unsandata.charAt(i));}
+		}
+		
+		return returnbuffer.toString();
 	}
 	
 	//Runs the file associated with the given title
@@ -64,4 +109,5 @@ public class GCompile {
 		if(error.equals("")) {return output;}
 		else {return error;}	
 	}
+	
 }
