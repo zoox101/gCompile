@@ -12,17 +12,11 @@ import org.jsoup.select.Elements;
 
 public class GCompile {
 
-	public static void main(String args[]) throws IOException {
-		System.out.println("Running");	
-		File directory = new File("/Users/WilliamBooker/Desktop/AAAGDocOutputs/");
-		//File directory = null;
-		ArrayList<String> testing = new ArrayList<String>();
-		testing.add("https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit?usp=sharing");
-		testing.add("https://docs.google.com/document/d/1fk3NDJ6m_p5woQkW03mkYmpHuC1knuRPcHmMGXTwUrk/edit?usp=sharing");
-		System.out.println(compileAndRun(testing, directory));
-	}
+	//The file seperator for the local machine
+	public final static String fsep = File.separator;
 
-	public static String compileAndRun(ArrayList<String> googledocs, File directory) throws IOException {
+	//Compiles the google docs and runs the main method
+	public static String compileAndRun(ArrayList<String> googledocs, File src, File bin) throws IOException {
 
 		//Setting static variables
 		String prefix = "https://docs.google.com/document/d/";
@@ -34,11 +28,11 @@ public class GCompile {
 			doclinks.add(url.substring(prefix.length(), prefix.length() + ID_LENGTH));}
 
 		//Compiling the IDs
-		String main = compile(doclinks.get(0), directory);
-		for(int i=1; i<doclinks.size(); i++) {compile(doclinks.get(i), directory);}
+		for(int i=1; i<doclinks.size(); i++) {compile(doclinks.get(i), src, bin);}
+		String main = compile(doclinks.get(0), src, bin);
 
 		//Returning the outputs 
-		String outputs = run(main, directory);
+		String outputs = run(main, bin);
 
 		return outputs;
 	}
@@ -72,7 +66,7 @@ public class GCompile {
 
 		//Chop off the first part of the data
 		unsandata = unsandata.substring(expectedstart.length());
-		
+
 		//Getting the string
 		StringBuffer returnbuffer = new StringBuffer();
 		for(int i=1; i<unsandata.length(); i++) {
@@ -95,7 +89,7 @@ public class GCompile {
 	}
 
 	//Compiles the code from the given link returns the name of the class
-	public static String compile(String documentlink, File directory) throws IOException {
+	public static String compile(String documentlink, File src, File bin) throws IOException {
 
 		//Connecting to the server and getting the data
 		Document doc = Jsoup.connect("https://docs.google.com/document/d/" + documentlink + "/edit?usp=sharing").get();
@@ -115,30 +109,31 @@ public class GCompile {
 
 		//Creating a java file to hold the file
 		File file;
-		if(directory == null) {file = new File(title + ".java");}
-		else {file = new File(directory.getAbsolutePath() + File.separator + title + ".java");}
+		if(src == null) {file = new File(title + ".java");}
+		else {file = new File(src.getAbsolutePath() + fsep + title + ".java");}
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(code); writer.close();
 
-		if(directory != null) {
-			String dir = directory.getAbsolutePath();
-			Bash.run("javac -sourcepath " + dir + " -d " + dir + " " +  dir + File.separator + title + ".java");
-		}
-		else {Bash.run("javac " + title + ".java");}
+		if(src == null) {
+			Bash.run("javac " + title + ".java");}
+		else {
+			String srcdir = src.getAbsolutePath();
+			String bindir = bin.getAbsolutePath();
+			Bash.run("javac -sourcepath " + srcdir + " -d " + bindir + " " + srcdir + fsep + title + ".java");}
 
 		//Return the name of the class
 		return title;
 	}
 
 	//Runs the file associated with the given title
-	public static String run(String title, File directory) {
+	public static String run(String title, File bin) {
 
 		String output; String error;
-		
+
 		//Runs the file
-		if(directory != null) {
-			output =  Bash.run("java -classpath " + directory.getAbsolutePath() + " " + title);
+		if(bin != null) {
+			output =  Bash.run("java -classpath " + bin.getAbsolutePath() + " " + title);
 			error = Bash.checkError();
 		}
 		else {
