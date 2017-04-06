@@ -1,1 +1,2 @@
-TODO: Backend's Finished!
+TODO:
+Figure out more character checking on new file
