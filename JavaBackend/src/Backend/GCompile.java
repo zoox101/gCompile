@@ -56,6 +56,11 @@ public class GCompile {
 
 		//Getting the unsanitized data from the HTML page
 		String unsandata = targetelement.data();
+		
+		//TESTING
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("test.txt")));
+		writer.write(unsandata);
+		writer.close();
 		//System.out.println(unsandata); //TESTING
 
 		String expectedstart = "DOCS_modelChunk = [{\"ty\":\"is\",\"ibi\":1,\"s\":";
@@ -72,10 +77,15 @@ public class GCompile {
 		for(int i=1; i<unsandata.length(); i++) {
 			if(unsandata.charAt(i) == '\\') {
 				i++; 
-				String dummytab = "u000b"; String equals = "u003d";
+				String dummytab = "u000b"; String equals = "u003d"; 
+				String rarrow = "u003e"; String larrow = "u003c";
 				if(unsandata.substring(i, i+dummytab.length()).equals(dummytab)) {i+=dummytab.length()-1;}
 				else if(unsandata.substring(i, i+equals.length()).equals(equals)) {
 					i+=equals.length()-1; returnbuffer.append("=");}
+				else if(unsandata.substring(i, i+equals.length()).equals(rarrow)) {
+					i+=equals.length()-1; returnbuffer.append(">");}
+				else if(unsandata.substring(i, i+equals.length()).equals(larrow)) {
+					i+=equals.length()-1; returnbuffer.append("<");}
 				else if(unsandata.charAt(i) == '\\') {returnbuffer.append("\\" + unsandata.charAt(++i));}
 				else if(unsandata.charAt(i) == 't') {returnbuffer.append("\t");}
 				else if(unsandata.charAt(i) == 'b') {returnbuffer.append("\b");}
