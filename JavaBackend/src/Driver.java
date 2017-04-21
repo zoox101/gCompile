@@ -1,4 +1,3 @@
-import java.awt.Scrollbar;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,36 +9,39 @@ import org.jsoup.nodes.Document;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
+
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-
+/**
+ * This program allows the user to input google doc urls so that they can compile
+ * code from google docs locally and get a console output without having to copy and 
+ * paste code back and forth from google doc to their local machine.
+ */
 public class Driver extends Application{
+	final int APPWIDTH = 400;
+	final int APPHEIGHT = 500;
 	Button plusButton;
 	GridPane grid;
 	AtomicInteger numAddedFiles;
 	AtomicInteger numPresetFilesToAdd;
-	
-	
+	Stage mainStage;
+	Scene outputScene;
+	Accordion accordion;
+
 	public static void main(String args[]) throws IOException {
 
 		System.out.println("Running");
@@ -52,7 +54,6 @@ public class Driver extends Application{
 			if(code.charAt(i) != '\u000b') {
 				newcode.append(code.charAt(i));
 			}
-			
 		}
 		
 		code = newcode.toString();
@@ -70,76 +71,87 @@ public class Driver extends Application{
 		   
 	}
 
+	/**
+	 *  This is for the UI so that the user can add google documents and compile them to get 
+	 *  a console output.
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		Group root = new Group(); //create the root
+		//Create the main pane that the user will interact with
+		FlowPane outputPane = new FlowPane();
+		outputScene = new Scene(outputPane, APPWIDTH, APPHEIGHT);
+	
+		/*
+		 * Allow the user to add documents and compile them to get an output
+		 */
 		ScrollPane sp = new ScrollPane();
+		TitledPane tps = new TitledPane("Add Google Documents", sp);
+	    accordion = new Accordion ();  
+	    accordion.getPanes().addAll(tps);
+		accordion.setMinWidth(APPWIDTH);
+		accordion.setMaxHeight(APPHEIGHT);
+		
+		outputPane.getChildren().add(accordion);
+	        
 		grid = new GridPane(); 
-		
-		
 		plusButton = new Button("+");
 		numAddedFiles = new AtomicInteger(); //initializes to 0
 		numPresetFilesToAdd = new AtomicInteger();
 		plusButton.setOnAction(e -> pressButton(e));
 		plusButton.setMaxHeight(10);
 		plusButton.setMaxWidth(10);
-		grid.setAlignment(Pos.CENTER);
+		grid.setAlignment(Pos.TOP_CENTER);
 		grid.setHgap(2);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(25, 25, 25, 25));
-		
-		//sp.fitToHeightProperty();
-		
-		sp.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		sp.setHbarPolicy(ScrollBarPolicy.NEVER);
-		sp.setContent(grid);
-		Scene scene = new Scene(sp, 370, 275);
-		
+		grid.setPrefHeight(APPHEIGHT);
+		grid.setPrefWidth(APPWIDTH);
+		 
 		Button compileBtn = new Button("Compile");
+		compileBtn.setOnAction(e -> pressButton(e));
 		compileBtn.setMaxWidth(200);;
 		grid.add(compileBtn, 1, 0, 2, 1);
-		//Text scenetitle = new Text("Select Documents to compile.");
-		//scenetitle.setFont(Font.font("", FontWeight.NORMAL, 14));
-		//grid.add(scenetitle, 0, 0, 2, 1);
+
 		
 		Label doc1Label = new Label("Google Doc 1:");
 		grid.add(doc1Label, 0, numPresetFilesToAdd.incrementAndGet());
 
 		TextField doc1Text = new TextField();
 		grid.add(doc1Text, 1, numPresetFilesToAdd.get());
-		
-		Label doc2Label = new Label("Google Doc 2:");
-		grid.add(doc2Label, 0, numPresetFilesToAdd.incrementAndGet());
 		grid.add(plusButton, 3, numPresetFilesToAdd.get());
-		
+	
 		TextField doc2Text = new TextField();
 		grid.add(doc2Text, 1, numPresetFilesToAdd.get());
-		ScrollBar s = new ScrollBar();
-		s.setOrientation(Orientation.VERTICAL);
+	
+		sp.setPrefHeight(APPHEIGHT-50);
+		sp.setHbarPolicy(ScrollBarPolicy.NEVER);
+		sp.setPrefWidth(accordion.getWidth());
+		sp.setContent(grid);
 		
+		/**
+		 * Create area for the output to print to
+		 */
+		Pane consolePane = new Pane();
+		TextArea outputText = new TextArea("Output");
+		outputText.setMinSize(APPWIDTH, APPHEIGHT-25);
+		outputText.setMaxSize(APPWIDTH, APPHEIGHT-25);
+		consolePane.getChildren().add(outputText);
+		consolePane.setMaxSize(APPWIDTH, APPHEIGHT-25);
+		outputPane.getChildren().add(consolePane);
+
 		
-/*		Button compileBtn = new Button("Compile");
-		HBox hbBtn = new HBox(5);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().add(compileBtn);
-		grid.add(hbBtn, 1, 4);
-		final Text actiontarget = new Text();
-        grid.add(actiontarget, 1, 6);
-        compileBtn.setOnAction(new EventHandler<ActionEvent>() {
-        	 
-            @Override
-            public void handle(ActionEvent e) {
-                actiontarget.setFill(Color.FIREBRICK);
-                actiontarget.setText("Compile button pressed");
-            }
-        });*/
-    
-	       
-	        primaryStage.setScene(scene);
-	        primaryStage.show();
+		//Set the stage to the UI
+		mainStage = primaryStage;
+	    mainStage.setScene(outputScene);
+	    mainStage.setResizable(false);
+	    mainStage.show();
 	}
-    
+
+	/**
+	 * These are listeners that allow the user to dynamically add more google docs
+	 * 
+	 */
     public void pressButton(ActionEvent e){
     	if(e.getSource().toString().contains("+")){
     		Button tempAddBtn = new Button("+");
@@ -148,7 +160,10 @@ public class Driver extends Application{
     		grid.add(new Label("Google Doc " + (numPresetFilesToAdd.get() + numAddedFiles.get()) + ":"),
     				0, numPresetFilesToAdd.get()+ numAddedFiles.get());
     		grid.add(new TextField(), 1, numPresetFilesToAdd.get() + numAddedFiles.get());
-
+    	}else if(e.getSource().toString().contains("Compile")){
+    		System.out.println("pressing");
+    		mainStage.setScene(outputScene);
+    		mainStage.show();
     	}
     
     }

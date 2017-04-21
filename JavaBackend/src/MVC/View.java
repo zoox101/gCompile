@@ -58,12 +58,9 @@ public class View extends Application {
 		
 		//start game button
         Button compileBtn = new Button("Compile");
-	
-		
 		
 		Pane frontPane = new Pane();
 		frontPane.getChildren().add(compileBtn);
-		
 		
 
 		root.getChildren().add(frontPane);
