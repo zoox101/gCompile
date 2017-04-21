@@ -23,7 +23,7 @@ public class ZZZTesting {
 		store.add("https://docs.google.com/document/d/1NtkTce2Fm4-IaRIy27CL1M8Gs9si_LAtixmma2-3P7Q/edit?usp=sharing");
 		/* */
 		
-		System.out.println(GCompile.compileAndRun(store, store.src, store.bin));
+		System.out.println(GCompile.compileAndRun(store));
 		System.out.println("Finished");
 	}
 }

@@ -9,6 +9,10 @@ public class GCompile {
 
 	//The file separator for the local machine
 	public final static String fsep = File.separator;
+	
+	//Compiles the google docs and runs the main method
+	public static String compileAndRun(FileStorage storage) throws IOException {
+		return compileAndRun(storage, storage.src, storage.bin);}
 
 	//Compiles the google docs and runs the main method
 	public static String compileAndRun(ArrayList<String> googledocs, File src, File bin) throws IOException {
