@@ -59,9 +59,11 @@ public class GCompile {
 		if(src == null) {file = new File(title + ".java");}
 		else {file = new File(src.getAbsolutePath() + fsep + title + ".java");}
 
+		//Writing the code to a file
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(code); writer.close();
 
+		//Compile the code to the correct location
 		if(src == null) {
 			Bash.run("javac " + title + ".java");}
 		else {

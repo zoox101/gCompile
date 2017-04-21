@@ -5,11 +5,14 @@ import java.util.ArrayList;
 public class FileStorage extends ArrayList<String> {
 	private static final long serialVersionUID = 1L;
 	
+	//The source and bin directories
 	public File src;
 	public File bin;
 
+	//Creates a new empty file storage object
 	public FileStorage() {super();}
 	
+	//Creates a file storage object at the set directory
 	public FileStorage(File directory) {
 		src = new File(directory.getAbsolutePath() + File.separator + "src");
 		if(!src.exists()) {src.mkdir();}
@@ -17,6 +20,7 @@ public class FileStorage extends ArrayList<String> {
 		if(!bin.exists()) {bin.mkdir();}
 	}
 	
+	//Creates source and bin folders froms scratch
 	public FileStorage(File src, File bin) {
 		this.src = src; 
 		if(!src.exists()) {src.mkdir();}

@@ -16,18 +16,7 @@ public class ZZZTesting {
 		System.out.println("Running");	
 		FileStorage store = new FileStorage(new File("/Users/WilliamBooker/Desktop/AAAGDocOutputs/"));
 		
-		//store.add("https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit?usp=sharing");
-		//store.add("https://docs.google.com/document/d/1fk3NDJ6m_p5woQkW03mkYmpHuC1knuRPcHmMGXTwUrk/edit?usp=sharing");
-		
-		//store.add("https://docs.google.com/document/d/10IXAHNEpPP4s0c76cCLJYnQhbFwH2VMYEuv3cUvZiMo/edit?usp=sharing");
-		
-		//https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/export?format=txt
-		
-		store.add("https://docs.google.com/document/d/10IXAHNEpPP4s0c76cCLJYnQhbFwH2VMYEuv3cUvZiMo/edit?usp=sharing");
-		
-		///export?format=html
-		
-		/* *
+		/* */
 		store.add("https://docs.google.com/document/d/1wMpESdfLqrdCwabn21WIoWPd4lfuwJGhTC3Qilpvzko/edit?usp=sharing");
 		store.add("https://docs.google.com/document/d/1tenWL80YcIKQOVlb6Go1ZTnSfTy1iafyZDrrhftwT2U/edit?usp=sharing");
 		store.add("https://docs.google.com/document/d/1ocnxqVC9277CzHDbNfTknclTDTS8dCDrhg0t1jNbYjE/edit?usp=sharing");
@@ -35,24 +24,6 @@ public class ZZZTesting {
 		/* */
 		
 		System.out.println(GCompile.compileAndRun(store, store.src, store.bin));
-		
 		System.out.println("Finished");
 	}
-
-	/*
-	public static void main(String[] args) throws IOException {
-		
-		//Document doc = Jsoup.connect("https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit").get();
-		//test(doc.body().toString());
-		
-		File file = new File("/Users/WilliamBooker/Desktop/AAAGDocOutputs/");
-		System.out.println(file.isDirectory());
-	}
-	
-	private static void test(String string) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("test.txt")));
-		writer.write(string);
-		writer.close();
-	}
-	*/
 }
