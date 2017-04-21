@@ -1,3 +1,5 @@
+package FrontEnd;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,7 +33,7 @@ import javafx.stage.Stage;
  * code from google docs locally and get a console output without having to copy and 
  * paste code back and forth from google doc to their local machine.
  */
-public class Driver extends Application{
+public class FrontEnd extends Application{
 	final int APPWIDTH = 400;
 	final int APPHEIGHT = 500;
 	Button plusButton;
@@ -43,29 +45,6 @@ public class Driver extends Application{
 	Accordion accordion;
 
 	public static void main(String args[]) throws IOException {
-
-		System.out.println("Running");
-
-		Document doc = Jsoup.connect("https://docs.google.com/document/d/1ULCRSEaBhw7oJ4Way2GQU0dDM62IiQUmO5LARWWZydQ/edit?usp=sharing").get();
-		String code = doc.select("meta[property = og:description]").attr("content");
-		StringBuffer newcode = new StringBuffer();
-
-		for(int i=0; i<code.length(); i++) {
-			if(code.charAt(i) != '\u000b') {
-				newcode.append(code.charAt(i));
-			}
-		}
-		
-		code = newcode.toString();
-
-
-		File file = new File("Test.java");
-		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-		writer.write(code); writer.close();
-
-		Bash.run("javac Test.java");
-		String[] io = Bash.run("java Test");
-		System.out.println(io[0]);
 		
 		launch(args);
 		   
