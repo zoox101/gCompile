@@ -5,11 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 public class GCompile {
 
 	//The file separator for the local machine
@@ -37,91 +32,27 @@ public class GCompile {
 		return outputs;
 	}
 
-	//Gets the google doc data from a document
-	private static String fetchData(Document doc) throws IOException {
-
-		//Getting the correct elements from the document
-		Elements elements = doc.select("script[type = text/javascript]");
-
-		//Getting the target element
-		Element targetelement = null;
-		String target = "DOCS_modelChunk =";
-		for(Element element: elements) {
-			if(element.data().length() > target.length() && 
-					element.data().substring(0, target.length()).equals(target)) {
-				targetelement = element; 
-				break;
-			}
-		}
-
-		//Getting the unsanitized data from the HTML page
-		String unsandata = targetelement.data();
-		
-		//TESTING
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("test.txt")));
-		writer.write(unsandata);
-		writer.close();
-		//System.out.println(unsandata); //TESTING
-
-		String expectedstart = "DOCS_modelChunk = [{\"ty\":\"is\",\"ibi\":1,\"s\":";
-
-		//Checks to make sure the data is correct
-		if(!unsandata.substring(0, expectedstart.length()).equals(expectedstart)) {
-			throw new IOException("ODD INFO FROM GOOGLE EXCEPTION");}
-
-		//Chop off the first part of the data
-		unsandata = unsandata.substring(expectedstart.length());
-
-		//Getting the string
-		StringBuffer returnbuffer = new StringBuffer();
-		for(int i=1; i<unsandata.length(); i++) {
-			if(unsandata.charAt(i) == '\\') {
-				i++; 
-				String dummytab = "u000b"; String equals = "u003d"; 
-				String rarrow = "u003e"; String larrow = "u003c";
-				if(unsandata.substring(i, i+dummytab.length()).equals(dummytab)) {i+=dummytab.length()-1;}
-				else if(unsandata.substring(i, i+equals.length()).equals(equals)) {
-					i+=equals.length()-1; returnbuffer.append("=");}
-				else if(unsandata.substring(i, i+equals.length()).equals(rarrow)) {
-					i+=equals.length()-1; returnbuffer.append(">");}
-				else if(unsandata.substring(i, i+equals.length()).equals(larrow)) {
-					i+=equals.length()-1; returnbuffer.append("<");}
-				else if(unsandata.charAt(i) == '\\') {returnbuffer.append("\\" + unsandata.charAt(++i));}
-				else if(unsandata.charAt(i) == 't') {returnbuffer.append("\t");}
-				else if(unsandata.charAt(i) == 'b') {returnbuffer.append("\b");}
-				else if(unsandata.charAt(i) == 'n') {returnbuffer.append("\n");}
-				else if(unsandata.charAt(i) == 'r') {returnbuffer.append("\r");}
-				else if(unsandata.charAt(i) == 'f') {returnbuffer.append("\f");}
-				else if(unsandata.charAt(i) == '\'') {returnbuffer.append("\'");}
-				else if(unsandata.charAt(i) == '"') {returnbuffer.append("\"");}
-				//else {throw new IOException("UNKNOWN_CHARACTER_EDGE_CASE: " + unsandata.charAt(i));}
-			}
-			else if(unsandata.charAt(i) == '"') {break;}
-			else {returnbuffer.append(unsandata.charAt(i));}
-		}
-
-		//Returning the string
-		return returnbuffer.toString();
-	}
-
 	//Compiles the code from the given link returns the name of the class
 	public static String compile(String documentlink, File src, File bin) throws IOException {
 
+		String link = "https://docs.google.com/document/d/" + documentlink + "/export?format=txt";
+
 		//Connecting to the server and getting the data
-		Document doc = Jsoup.connect("https://docs.google.com/document/d/" + documentlink + "/edit?usp=sharing").get();
-		String code = fetchData(doc);
+		String code = Bash.run("curl " + link); Bash.checkError();
+
+		//Looking for header
+		String title = ""; String[] split = code.split(" ");
+		for(int i=0; i<split.length; i++) {
+			if(split[i].equals("class")) {
+				title = split[i+1]; break;}
+		}
 
 		//Sanitizing the returned code
 		StringBuffer newcode = new StringBuffer();
 		for(int i=0; i<code.length(); i++) {
-			if(code.charAt(i) != '\u000b') {
+			if(code.charAt(i) != '\ufeff') {
 				newcode.append(code.charAt(i));}}
 		code = newcode.toString();
-
-		//Getting the name of the class
-		String title = doc.title();
-		int endbezel = new String(" - Google Docs").length();
-		title = title.substring(0, title.length()-endbezel);
 
 		//Creating a java file to hold the file
 		File file;
