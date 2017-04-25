@@ -10,7 +10,7 @@ public class Controller {
 	FileStorage storage;
 	FrontEnd view;
 	
-	//Constrctor for the controller object
+	//Constructor for the controller object
 	public Controller(FrontEnd view) {
 		this.view = view;
 		storage = new FileStorage();
