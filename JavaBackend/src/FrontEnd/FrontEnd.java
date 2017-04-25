@@ -26,6 +26,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 /**
@@ -43,6 +44,24 @@ public class FrontEnd extends Application{
 	Stage mainStage;
 	Scene outputScene;
 	Accordion accordion;
+	TextArea outputText;
+	File selectedDirectory;
+
+	protected File getSelectedDirectory() {
+		return selectedDirectory;
+	}
+
+	protected void setSelectedDirectory(File selectedDirectory) {
+		this.selectedDirectory = selectedDirectory;
+	}
+
+	protected TextArea getOutputText() {
+		return outputText;
+	}
+
+	protected void setOutputText(TextArea outputText) {
+		this.outputText = outputText;
+	}
 
 	public static void main(String args[]) throws IOException {
 		
@@ -91,7 +110,7 @@ public class FrontEnd extends Application{
 		compileBtn.setOnAction(e -> pressButton(e));
 		compileBtn.setMaxWidth(200);;
 		grid.add(compileBtn, 1, 0, 2, 1);
-
+		
 		
 		Label doc1Label = new Label("Google Doc 1:");
 		grid.add(doc1Label, 0, numPresetFilesToAdd.incrementAndGet());
@@ -112,7 +131,7 @@ public class FrontEnd extends Application{
 		 * Create area for the output to print to
 		 */
 		Pane consolePane = new Pane();
-		TextArea outputText = new TextArea("Output");
+		outputText = new TextArea("Output");
 		outputText.setMinSize(APPWIDTH, APPHEIGHT-25);
 		outputText.setMaxSize(APPWIDTH, APPHEIGHT-25);
 		consolePane.getChildren().add(outputText);
@@ -141,6 +160,14 @@ public class FrontEnd extends Application{
     		grid.add(new TextField(), 1, numPresetFilesToAdd.get() + numAddedFiles.get());
     	}else if(e.getSource().toString().contains("Compile")){
     		System.out.println("pressing");
+    		 final DirectoryChooser directoryChooser =
+    	                new DirectoryChooser();
+    		 		selectedDirectory =
+    	                    directoryChooser.showDialog(mainStage);
+    	            if (selectedDirectory != null) {
+    	                selectedDirectory.getAbsolutePath();
+    	            }
+    		
     		mainStage.setScene(outputScene);
     		mainStage.show();
     	}
