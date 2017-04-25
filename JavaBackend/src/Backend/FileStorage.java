@@ -37,6 +37,12 @@ public class FileStorage extends ArrayList<String> {
 		this.bin = bin; if(!bin.exists()) {bin.mkdir();}
 	}
 	
+	//Checks to see if the file storage object has a directory
+	public boolean hasDirectory() {
+		if(src != null) {return true;}
+		else {return false;}
+	}
+	
 	//Adds the string to the front of the array
 	public void addToFront(String string) {this.add(0, string);}
 }
