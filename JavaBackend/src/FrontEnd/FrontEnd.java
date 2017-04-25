@@ -22,6 +22,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -47,11 +48,16 @@ public class FrontEnd extends Application{
 	TextArea outputText;
 	File selectedDirectory;
 
-	protected File getSelectedDirectory() {
+	public File getSelectedDirectory() {
+		final DirectoryChooser directoryChooser = new DirectoryChooser();
+		selectedDirectory = directoryChooser.showDialog(mainStage);
+	    if (selectedDirectory != null) {
+	    	selectedDirectory.getAbsolutePath();
+	    }
 		return selectedDirectory;
 	}
 
-	protected void setSelectedDirectory(File selectedDirectory) {
+	public void setSelectedDirectory(File selectedDirectory) {
 		this.selectedDirectory = selectedDirectory;
 	}
 
@@ -59,8 +65,8 @@ public class FrontEnd extends Application{
 		return outputText;
 	}
 
-	protected void setOutputText(TextArea outputText) {
-		this.outputText = outputText;
+	public void setOutputText(String outputs) {
+		this.outputText = new TextArea(outputs); 
 	}
 
 	public static void main(String args[]) throws IOException {
@@ -94,6 +100,7 @@ public class FrontEnd extends Application{
 	        
 		grid = new GridPane(); 
 		plusButton = new Button("+");
+		plusButton.setTooltip(new Tooltip("Add more Google documents to compile"));
 		numAddedFiles = new AtomicInteger(); //initializes to 0
 		numPresetFilesToAdd = new AtomicInteger();
 		plusButton.setOnAction(e -> pressButton(e));
@@ -160,13 +167,6 @@ public class FrontEnd extends Application{
     		grid.add(new TextField(), 1, numPresetFilesToAdd.get() + numAddedFiles.get());
     	}else if(e.getSource().toString().contains("Compile")){
     		System.out.println("pressing");
-    		 final DirectoryChooser directoryChooser =
-    	                new DirectoryChooser();
-    		 		selectedDirectory =
-    	                    directoryChooser.showDialog(mainStage);
-    	            if (selectedDirectory != null) {
-    	                selectedDirectory.getAbsolutePath();
-    	            }
     		
     		mainStage.setScene(outputScene);
     		mainStage.show();

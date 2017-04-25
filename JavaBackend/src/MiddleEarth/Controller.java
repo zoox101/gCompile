@@ -21,7 +21,7 @@ public class Controller {
 		
 		//Gets the directory from the view if is does not already exist
 		if(!storage.hasDirectory()) {
-			File directory = view.getDirectory();
+			File directory = view.getSelectedDirectory();
 			storage.setDirectory(directory);
 		}
 		
@@ -35,7 +35,7 @@ public class Controller {
 		catch (IOException error) {}
 		
 		//Passes the outputs to the view
-		view.setOutputs(outputs);
+		view.setOutputText(outputs);
 	}
 	
 
