@@ -57,7 +57,7 @@ public class Controller{
 		
 		// Passes the outputs to the view
 		m.setOutputText(outputs);
-		System.out.println("outputsa: " + outputs);
+
 	}
 	
 	/**
