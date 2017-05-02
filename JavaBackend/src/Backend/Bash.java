@@ -17,6 +17,8 @@ public class Bash {
 	    StringBuffer error = new StringBuffer();
 
 	    try {
+//	    	System.out.println("Command:" + command);
+//	    	System.out.println("ERROR:" + Bash.checkError());
 	    	//Creates a new process and waits for it to run
 	        Process process = Runtime.getRuntime().exec(command);
 	        //process.waitFor();

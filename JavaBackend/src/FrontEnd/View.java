@@ -40,8 +40,8 @@ import model.Model;
 public class View extends Application{
 	
 	// Set size of the Frame
-	private final int APPWIDTH = 400;
-	private final int APPHEIGHT = 500;
+	public final static int APPWIDTH = 400;
+	public final static int APPHEIGHT = 500;
 	
 	// Initialize Model and Controller
 	private Model m = new Model();
@@ -96,6 +96,14 @@ public class View extends Application{
 		compileBtn.setTooltip(new Tooltip("Select a directory to save to"));
 		compileBtn.setOnAction(e -> c.pressButton(e, m));
 		compileBtn.setMaxWidth(200);
+		
+		// Add the help button that assists users
+		Button helpButton = new Button("?");
+		helpButton.setTooltip(new Tooltip("Click here to get more information "
+				+ "on how to use tool"));
+		helpButton.setMaxHeight(10);
+		helpButton.setMaxWidth(10);
+		helpButton.setOnAction( e ->c.pressButton(e, m));
 				
 		// Create grid for compile button, plus button, labels, and text Area
 		GridPane grid = new GridPane(); 
@@ -106,6 +114,7 @@ public class View extends Application{
 		grid.setPrefHeight(APPHEIGHT);
 		grid.setPrefWidth(APPWIDTH);
 		grid.add(compileBtn, 1, 0, 2, 1);
+		grid.add(helpButton, 3, 0);
 		
 		// Increment the numbers of file labels that are being added to the GUI
 		m.setNumPresetFilesToAdd(m.getNumPresetFilesToAdd() + 1);
@@ -130,13 +139,16 @@ public class View extends Application{
 		
 		/***************** Create area for the output to print to ***************/	
 		Pane consolePane = new Pane();
-		outputText = new TextArea("Output");
+		m.setOutputText("Console output");
+		outputText = new TextArea(m.getOutputText());
 		outputText.setMinSize(APPWIDTH, APPHEIGHT-25);
 		outputText.setMaxSize(APPWIDTH, APPHEIGHT-25);
-		consolePane.getChildren().add(outputText);
+		
+		consolePane.getChildren().add(outputText);	
 		consolePane.setMaxSize(APPWIDTH, APPHEIGHT-25);
-		outputPane.getChildren().add(consolePane);
-
+		m.setConsolePane(consolePane);
+		outputPane.getChildren().add(m.getConsolePane());
+		
 		
 		// Set the stage to the UI
 		Stage mainStage = primaryStage;

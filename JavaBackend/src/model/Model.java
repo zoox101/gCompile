@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -16,17 +17,19 @@ public class Model {
 	private int numPresetFilesToAdd;
 	private GridPane gridpane;
 	private Stage mainStage;
+	private Pane consolePane;
 	
 	public Model(){
-		this.outputText = "Console output";
 		this.selectedDirectory = null;
 		this.files = new ArrayList<String>();
-
+	
 		this.numAddedFiles = 0;
 		this.numPresetFilesToAdd = 0;
 
 	}
 	
+
+
 	/**
 	 *  If the user has not specified a directory, force the
 	 *  user to select a directory.
@@ -42,6 +45,13 @@ public class Model {
 	}
 
 	/******** A whole bunch of getters & setters, complements of MVC *********/
+	public Pane getConsolePane() {
+		return consolePane;
+	}
+
+	public void setConsolePane(Pane consolePane) {
+		this.consolePane = consolePane;
+	}
 	
 	public void setSelectedDirectory(File selectedDirectory) {
 		this.selectedDirectory = selectedDirectory;
